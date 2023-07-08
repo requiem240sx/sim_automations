@@ -10,4 +10,7 @@ Fanalab.py is still a work in progress, but hoping to open Fanalab, Navigate to 
 
 CMPreset_to_ACINI.py is a script to convert CMPreset (json style) config files to Assetto Corsa .ini files. This is only working for Audio and Video currently.   This way it can quickly select and copy over your audio/video presets into assetto corsa. 
 
+### Fanatec Control Panel
+**Status: ** Complete
 Fanatec_Control_Panel.py is a script to open fanatec control panel, navigate to the tuning tab and the select 1 of the 5 presets. 
+To use this, simply call the script and pass in the preset number you would like it to select. Example: `python .\fanatec_control_panel_preset.py 2`
