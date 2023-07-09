@@ -12,17 +12,17 @@ fanatec_control_panel_directory = r"C:\Program Files\Fanatec\Fanatec Wheel\ui"
 # Change to the Fanatec Control Panel directory
 try:
     os.chdir(fanatec_control_panel_directory)
-    print("Changed to Fanatec Control Panel directory successfully.")
+    print("Fanatec - Changed to Fanatec Control Panel directory successfully.")
 except FileNotFoundError:
-    print("Fanatec Control Panel directory not found. Please check the directory path.")
+    print("Fanatec - Fanatec Control Panel directory not found. Please check the directory path.")
     sys.exit(1)
 
 # Launch Fanatec Control Panel
 try:
     subprocess.Popen([fanatec_control_panel])
-    print("Fanatec Control Panel launched successfully.")
+    print("Fanatec - Fanatec Control Panel launched successfully.")
 except FileNotFoundError:
-    print("Fanatec Control Panel executable not found. Please check the file path.")
+    print("Fanatec - Fanatec Control Panel executable not found. Please check the file path.")
     sys.exit(1)
 
 time.sleep(2)  # Wait for the Fanatec Control Panel to load
@@ -30,9 +30,9 @@ time.sleep(2)  # Wait for the Fanatec Control Panel to load
 # Connect to the Fanatec Tuning Menu application
 try:
     app = Application(backend="uia").connect(path=fanatec_control_panel)
-    print("Connected to the Fanatec Tuning Menu application.")
+    print("Fanatec - Connected to the Fanatec Tuning Menu application.")
 except Exception as e:
-    print("Failed to connect to the Fanatec Tuning Menu application:", e)
+    print("Fanatec - Failed to connect to the Fanatec Tuning Menu application:", e)
     sys.exit(1)
 
 # Get the main window of the application
@@ -57,7 +57,7 @@ if len(sys.argv) > 1:
     try:
         setup_number = int(sys.argv[1])
     except ValueError:
-        print("Invalid setup number. Please provide a valid integer.")
+        print("Fanatec - Invalid setup number. Please provide a valid integer.")
         sys.exit(1)
 else:
     setup_number = 1  # Default to setup 1 if no argument is provided
@@ -79,5 +79,10 @@ time.sleep(1)
 if setup_number in setup_coordinates:
     click_x, click_y = setup_coordinates[setup_number]
     mouse_click(click_x, click_y)
+    print("Fanatec - Preset Selected: ", setup_number)
+
+    # Minimize the window
+    main_window.minimize()
+    print("Window minimized")
 else:
-    print("Invalid setup number. Please choose a number between 1 and 5.")
+    print("Fanatec - Invalid setup number. Please choose a number between 1 and 5.")
