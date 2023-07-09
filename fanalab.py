@@ -41,7 +41,29 @@ def focus_on_window(window):
     except Exception as e:
         print(f"Failed to set focus: {e}")
 
+#def recursive_print_children(item, depth=0):
+    #children = item.children()
+    #if not children:  # base case: no children.  It will only do this for titles not "hidden" in fanalab
+    #    return
+
+    #for child in children:
+        #print('  ' * depth + f"Child window text: {child.window_text()}")
+        #print('  ' * depth + f"Child class: {child.class_name()}")
+        #print('  ' * depth + f"Child properties: {child.element_info}")
+
+        # Recursive case: if there are children, print their info too
+        #recursive_print_children(child, depth + 1)
+
+def get_game_name(app):
+    for child in app.descendants():
+        if child.class_name() == 'TextBlock':
+            if 'Currently Modifying Game Profile:' in child.window_text():
+                game_name = child.window_text().replace('Currently Modifying Game Profile: ', '').strip()
+                return game_name
+    return None  # If the game name wasn't found
+
 def main():
+    
     # Check if the application is already running
     app = check_application_running(FANALAB_EXE)
 
@@ -62,35 +84,35 @@ def main():
     # Click the 'Game Profile' tab
     game_profile_tab.click_input()
     time.sleep(SLEEP_DURATION)
-
-
-    #print(main_window.print_control_identifiers())
     
-    # Iterate over ListBox items
-    #list_box = main_window.child_window(title="List Box", control_type="List")
-    
-    # This should be close... 
-    game_list = game_profile_tab.child_window(class_name="ListBox", found_index=0, found_only=True, control_type="List")
-    #game_list.click_input()
+    game_list = game_profile_tab.child_window(class_name="ListBox", found_index=0)
 
-    #for item in game_list.children():
-        # Click on the item
-    #    item.click_input()
+    game_items = game_list.children(control_type="ListItem")
 
-        # Wait for UI to update
-    #    time.sleep(1)
-    #    print("Still checking..")
+    for item in game_items:
 
-        # Check if the "Dirt Rally" string appears in the window's text
-    #    if "DiRT Rally 2.0" in main_window.window_text():
-    #        print("Found the 'DiRT Rally 2.0' item.")
-    #        break
+        # Skip the item if it doesn't have any child fields (this skips "hidden" games in fanalab)
+        if not item.children():
+            continue
 
+        item.select()  # Select the item
+        time.sleep(1)  # Wait for the selection to take effect and for the new info to become visible
+        #print("Selected game item:")
+        #print(f"Item window text: {item.window_text()}")
+        #print(f"Item class: {item.class_name()}")
+        #print(f"Item properties: {item.element_info}")
+        #print("Child items:")
+        #recursive_print_children(item)
 
-    #print(main_window.dump_tree())
-    #tab = main_window.child_window(title="Game Profile", control_type="Tab")
-    #tab.click()
+        # Get the game name from the 'Currently Modifying Game Profile:' TextBlock
+        game_name = get_game_name(main_window)
 
+        # Skip the game profile if the name is '(Work in Progress)'
+        if game_name == '(Work in Progress)':
+            continue
+
+        if game_name is not None:
+            print(f"Currently modifying game profile: {game_name}")
 
 if __name__ == "__main__":
     main()
