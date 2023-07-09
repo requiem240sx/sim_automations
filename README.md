@@ -1,7 +1,8 @@
-# sim_automations
-Automate Sim Racing rig setup tasks for various games, cars, driving styles etc...
+# Sim Rig Automations
 
-I'm sick of having to pre-select a million things to Drift or do F1 or do Grip.  For Fanatec Settings, In Game Settings, and Key Mapping (JoyToKey).  It becomes to constantly try to get it right.  This is my implementation to simplfy this and write scripts to automatically setup my environment for what I want. 
+Automate your presets and setup you Sim Racing rig for various games, cars, driving styles, key button mappings etc...
+
+I'm sick of having to pre-select so many things to Drift or do Grip or Rally.  From Fanatec Settings, In Game Settings, Key Mapping (JoyToKey).  It becomes to constnat battle to try to get it right, and makes me avoid playing other racing styles as its too much setup.  This is my implementation to simplfy this and write a few scripts to automatically setup my environment for what I want. 
 
 
 
@@ -10,18 +11,28 @@ I'm sick of having to pre-select a million things to Drift or do F1 or do Grip. 
 
 
 
-#### JoyToKey
-`JoyToKey.py` is a simple script that opens the app, and will select the name of your preset. 
-Example: `python joytokey.py "Assetto Corsa - GT"`  This would select the preset named "Assetto Corsa - GT"
+##### JoyToKey
+`JoyToKey.py` is a simple script that opens the app, and select the name of your preset. (Replace "Assetto Corsa - GT" with your preset name)
+```
+python joytokey.py "Assetto Corsa - GT"
+```
 
-#### Fanalab
+
+
+##### Fanatec Control Panel
+`fanatec_control_panel_preset.py` is a script to open fanatec control panel, navigate to the tuning tab and the select 1 of the 5 presets. 
+To use this, simply call the script and pass in the preset number you would like it to select. 
+```
+python fanatec_control_panel_preset.py 2
+```
+
+##### Fanalab
+STILL WORKING ON THIS, WILL REPLACE FANATEC CONTROL PANEL WHEN ITS FINISHED
 `Fanalab.py` is still a work in progress, but hoping to open Fanalab, Navigate to the Game page, click a game, then click then double click the profile. 
 
-#### Content Manager
+##### Content Manager
+STILL WORKING ON THIS, THIS WILL SET ALL PRESETS WITHIN ASSETTO CORSA / CONTENT MANAGEr
 `CMPreset_to_ACINI.py` is a script to convert CMPreset (json style) config files to Assetto Corsa .ini files. This is only working for Audio and Video currently.   This way it can quickly select and copy over your audio/video presets into assetto corsa. 
 
 
-#### Fanatec Control Panel
-`fanatec_control_panel_preset.py` is a script to open fanatec control panel, navigate to the tuning tab and the select 1 of the 5 presets. 
-To use this, simply call the script and pass in the preset number you would like it to select. 
-Example: `python .\fanatec_control_panel_preset.py 2`
+
