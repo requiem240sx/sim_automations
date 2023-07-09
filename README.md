@@ -28,7 +28,36 @@ python fanatec_control_panel_preset.py 2
 
 ##### Fanalab
 STILL WORKING ON THIS, WILL REPLACE FANATEC CONTROL PANEL WHEN ITS FINISHED
-`Fanalab.py` is still a work in progress, but hoping to open Fanalab, Navigate to the Game page, click a game, then click then double click the profile. 
+`Fanalab.py` is still a work in progress, but hoping to open Fanalab, Navigate to the Game page, click the game you need, then click then double click the profile for that game.  It can do the first portion taking in the 1st arg for the game name, still working on getting the profile for the games loaded as an option. 
+```
+python fanalab2.py "Assetto Corsa"
+```
+Notes:  It has an array of game names, currently it cycles through the non hidden games, but a faster option may be to use the array to click the exact one you want instead. This will break if they add/remove any games from Fanalab though.  This is the current list of games in order as of 7/8/2023
+```
+Assetto Corsa
+DiRT Rally 2.0
+iRacing
+Assetto Corsa Competizione
+Automobilista
+Automobilista 2
+DiRT Rally
+F1 2017
+F1 2018
+F1 2019
+F1 2020
+F1 2021
+F1 22
+Kart Kraft
+Project Cars
+Project Cars 2
+RaceRoom Experience
+rFactor
+rFactor 2
+GRID 2019
+WRC Generations
+```
+
+
 
 ##### Content Manager
 STILL WORKING ON THIS, THIS WILL SET ALL PRESETS WITHIN ASSETTO CORSA / CONTENT MANAGEr
