@@ -7,7 +7,7 @@ I'm sick of having to pre-select so many things to Drift or do Grip or Rally.  F
 
 
 ## main.py
-`main.py` this main script will call the other scripts to setu pyour environment however you need.  You can make multiple copies of this adjusting the arguments or scripts that you need. 
+`main.py` this main script will call the other script(s) to setup your environment however you need.  You can make multiple copies of this adjusting the arguments or scripts that you need, then simpy make a shortcut you can double click to run. 
 
 
 
@@ -30,7 +30,7 @@ python fanatec_control_panel_preset.py 2
 STILL WORKING ON THIS, WILL REPLACE FANATEC CONTROL PANEL WHEN ITS FINISHED
 `Fanalab.py` is still a work in progress, but hoping to open Fanalab, Navigate to the Game page, click the game you need, then click then double click the profile for that game.  It can do the first portion taking in the 1st arg for the game name, still working on getting the profile for the games loaded as an option. 
 ```
-python fanalab2.py "Assetto Corsa"
+python .\fanalab.py "Assetto Corsa" "Grip-V2"
 ```
 Notes:  It has an array of game names, currently it cycles through the non hidden games, but a faster option may be to use the array to click the exact one you want instead. This will break if they add/remove any games from Fanalab though.  This is the current list of games in order as of 7/8/2023
 ```
