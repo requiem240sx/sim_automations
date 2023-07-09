@@ -60,8 +60,17 @@ WRC Generations
 
 
 ##### Content Manager
-STILL WORKING ON THIS, THIS WILL SET ALL PRESETS WITHIN ASSETTO CORSA / CONTENT MANAGEr
-`CMPreset_to_ACINI.py` is a script to convert CMPreset (json style) config files to Assetto Corsa .ini files. This is only working for Audio and Video currently.   This way it can quickly select and copy over your audio/video presets into assetto corsa. 
+STILL WORKING ON THIS, THIS WILL SET ALL PRESETS WITHIN CONTENT MANAGER / ASSETTO CORSA
+`cm_preset.py` is a script that you can pass in your presets, and it will go select them all for you. 
+
+```
+python cm_preset.py --ac_audio_preset "VR-V1" --ac_video_preset "HQ-HDR" --cm_preset "HQ-GripV3"
+
+# Info
+--ac_audio_preset (Add preset name that is in assetto corsa audio settings)
+--ac_video_preset (Add preset name that is in assetto corsa vieo settings)
+ --cm_preset (Add preset name that is in content manager settings)
+```
 
 
 
