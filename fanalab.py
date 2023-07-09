@@ -2,6 +2,8 @@ import argparse
 import time
 import subprocess
 from pywinauto import Application
+import pywinauto.timings
+import keyboard
 
 FANALAB_EXE = r"C:\Program Files (x86)\Fanatec\FanaLab\Control\FanaLab.exe"
 
@@ -10,9 +12,9 @@ def get_game_name_arg():
     """Parse command line argument for game name."""
     parser = argparse.ArgumentParser(description="Script to find a game profile in FanaLab.")
     parser.add_argument("game_name", help="The name of the game profile to find.")
+    parser.add_argument("game_profile", help="The game profile to select.")
     args = parser.parse_args()
-    return args.game_name
-
+    return args.game_name, args.game_profile
 
 def check_application_running(app_path):
     """Check if application is already running"""
@@ -50,7 +52,6 @@ def focus_on_window(window):
     except Exception as e:
         print(f"Failed to set focus: {e}")
 
-
 def get_game_name(app):
     for child in app.descendants():
         if child.class_name() == 'TextBlock':
@@ -59,10 +60,29 @@ def get_game_name(app):
                 return game_name
     return None  # If the game name wasn't found
 
+#def wait_for_user_confirmation(main_window, popup_name):
+#    """Waits until the user closes a pop-up window with the specified name."""
+#    try:
+#        main_window.window(name=popup_name).wait('exists', timeout=2)  # Check if the pop-up is shown
+#    except pywinauto.findwindows.ElementNotFoundError:
+#        # The pop-up could not be found, which means it was not shown
+#        return False  # No confirmation was needed
+#    else:
+#        # The pop-up was found, wait for it to be closed
+#        try:
+#            main_window.window(name=popup_name).wait_not('exists', timeout=pywinauto.timings.Timings.window_find_timeout)
+#            return True  # Confirmation was needed and has been handled
+#        except pywinauto.timings.TimeoutError:
+#            # The pop-up was not closed within the timeout, the user likely denied the action
+#            return None  # The user didn't confirm the action
+
+
+
+
 def main():
 
-    game_name_arg = get_game_name_arg()  # Get game name from command line argument
-    
+    game_name_arg, game_profile_arg = get_game_name_arg()  # Get game name and profile from command line arguments
+
     # Check if the application is already running
     app = check_application_running(FANALAB_EXE)
 
@@ -96,11 +116,6 @@ def main():
 
         item.select()  # Select the item
         time.sleep(1)  # Wait for the selection to take effect and for the new info to become visible
-        #print("Selected game item:")
-        #print(f"Item window text: {item.window_text()}")
-        #print(f"Item class: {item.class_name()}")
-        #print(f"Item properties: {item.element_info}")
-        #print("Child items:")
 
         # Get the game name from the 'Currently Modifying Game Profile:' TextBlock
         game_name = get_game_name(main_window)
@@ -112,11 +127,36 @@ def main():
         if game_name is not None:
             if game_name == game_name_arg:
                 print(f"Game match found: {game_name}")
-                print(f"Checking Profiles for: {game_name}")
-                #  Need to move this game portion to a function, then add another function for checking a games profiles. 
+
+                # If the game name matches, try to find and double-click the game profile
+                try:
+                    profile_item = main_window.child_window(title=game_profile_arg, control_type="Text")
+                    profile_item.double_click_input()
+                    print(f"Game profile '{game_profile_arg}' found and double-clicked.")
+
+                    # Wait for user confirmation if a pop-up appears.
+                    #confirmation_result = wait_for_user_confirmation(main_window, "Device mismatch")
+                    #if confirmation_result is None:
+                    #    print("User denied the action. Leaving window open.")
+                    #    break
+                    #elif confirmation_result:
+                    #    keyboard.send('alt+space, n') # This sends the minimize keystrokes to the active window
+                    #    print("Window minimized.")
+                    #    break
+
+                except Exception as e:
+                    print(f"Failed to find and double-click game profile '{game_profile_arg}': {e}")
+
+                # Minimize the window
+                time.sleep(1)
+                main_window.set_focus()
+                keyboard.send('enter')
+                keyboard.send('alt+space, n') # This sends the minimize keystrokes to the active window
+                print("Window minimized.")
+                break  # End the loop because we've found the game
 
             else:
-                print(f"Not a Game Match: {game_name}")
+                print(f"Currently modifying game profile: {game_name}")
 
 
 if __name__ == "__main__":
