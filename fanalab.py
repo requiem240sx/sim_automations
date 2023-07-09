@@ -1,9 +1,18 @@
+import argparse
 import time
 import subprocess
 from pywinauto import Application
 
 FANALAB_EXE = r"C:\Program Files (x86)\Fanatec\FanaLab\Control\FanaLab.exe"
-SLEEP_DURATION = 5
+
+
+def get_game_name_arg():
+    """Parse command line argument for game name."""
+    parser = argparse.ArgumentParser(description="Script to find a game profile in FanaLab.")
+    parser.add_argument("game_name", help="The name of the game profile to find.")
+    args = parser.parse_args()
+    return args.game_name
+
 
 def check_application_running(app_path):
     """Check if application is already running"""
@@ -41,18 +50,6 @@ def focus_on_window(window):
     except Exception as e:
         print(f"Failed to set focus: {e}")
 
-#def recursive_print_children(item, depth=0):
-    #children = item.children()
-    #if not children:  # base case: no children.  It will only do this for titles not "hidden" in fanalab
-    #    return
-
-    #for child in children:
-        #print('  ' * depth + f"Child window text: {child.window_text()}")
-        #print('  ' * depth + f"Child class: {child.class_name()}")
-        #print('  ' * depth + f"Child properties: {child.element_info}")
-
-        # Recursive case: if there are children, print their info too
-        #recursive_print_children(child, depth + 1)
 
 def get_game_name(app):
     for child in app.descendants():
@@ -63,6 +60,8 @@ def get_game_name(app):
     return None  # If the game name wasn't found
 
 def main():
+
+    game_name_arg = get_game_name_arg()  # Get game name from command line argument
     
     # Check if the application is already running
     app = check_application_running(FANALAB_EXE)
@@ -70,7 +69,7 @@ def main():
     # If the application is not running, launch it
     if app is None:
         launch_application(FANALAB_EXE)
-        time.sleep(SLEEP_DURATION)  # Wait for the application to load
+        time.sleep(10)   # Wait for the application to load
 
     # Connect to the application
     main_window = connect_to_application(FANALAB_EXE)
@@ -83,7 +82,7 @@ def main():
 
     # Click the 'Game Profile' tab
     game_profile_tab.click_input()
-    time.sleep(SLEEP_DURATION)
+    time.sleep(1) 
     
     game_list = game_profile_tab.child_window(class_name="ListBox", found_index=0)
 
@@ -102,7 +101,6 @@ def main():
         #print(f"Item class: {item.class_name()}")
         #print(f"Item properties: {item.element_info}")
         #print("Child items:")
-        #recursive_print_children(item)
 
         # Get the game name from the 'Currently Modifying Game Profile:' TextBlock
         game_name = get_game_name(main_window)
@@ -112,7 +110,14 @@ def main():
             continue
 
         if game_name is not None:
-            print(f"Currently modifying game profile: {game_name}")
+            if game_name == game_name_arg:
+                print(f"Game match found: {game_name}")
+                print(f"Checking Profiles for: {game_name}")
+                #  Need to move this game portion to a function, then add another function for checking a games profiles. 
+
+            else:
+                print(f"Not a Game Match: {game_name}")
+
 
 if __name__ == "__main__":
     main()
