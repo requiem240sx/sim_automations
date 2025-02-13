@@ -6,36 +6,18 @@ from pywinauto import Application
 import keyboard
 
 # Define constants
-CONTENT_MANAGER_PATH = r"C:\Users\dominic\Documents\asseto_mods\Content Manager.exe"
+CONTENT_MANAGER_PATH = r"C:\Users\dominic\Documents\ac_mods\Content Manager.exe"
 
 def get_args():
-    """
-    Function to handle command line arguments.
-    Returns:
-    ac_audio_preset : name of the preset to select from the audio settings
-    ac_video_preset : name of the preset to select from the video settings
-    cm_preset : name of the preset to select from the CM settings
-    """
     parser = argparse.ArgumentParser(description="Command line argument parser")
-    parser.add_argument("--ac_audio_preset",
-                        type=str,
-                        required=True,
-                        help="Name of the preset to select from the AC Audio settings")
-    parser.add_argument("--ac_video_preset",
-                        type=str,
-                        required=True,
-                        help="Name of the preset to select from the AC Video settings")
-    parser.add_argument("--cm_preset",
-                        type=str,
-                        required=True,
-                        help="Name of the preset to select from the CM settings")
-
+    parser.add_argument("--ac_audio_preset", type=str, required=True, help="Name of the preset to select from AC Audio settings")
+    parser.add_argument("--ac_video_preset", type=str, required=True, help="Name of the preset to select from AC Video settings")
+    parser.add_argument("--ac_controls_preset", type=str, required=True, help="Name of the preset to select from AC Controls settings")
+    parser.add_argument("--cm_preset", type=str, required=True, help="Name of the preset to select from CM settings")
     args = parser.parse_args()
-
-    return args.ac_audio_preset, args.ac_video_preset, args.cm_preset
+    return args.ac_audio_preset, args.ac_video_preset, args.ac_controls_preset, args.cm_preset
 
 def launch_application(app_path):
-    """Launches an application at the specified path."""
     try:
         subprocess.Popen([app_path])
         print(f"Content Manager - Successfully launched {app_path}")
@@ -43,7 +25,6 @@ def launch_application(app_path):
         print(f"Content Manager - Failed to launch {app_path}: {e}")
 
 def connect_to_application(app_path):
-    """Connects to an application and returns its main window."""
     try:
         app = Application(backend="uia").connect(path=app_path)
         main_window = app.window()
@@ -53,28 +34,18 @@ def connect_to_application(app_path):
         print(f"Content Manager - Failed to connect to {app_path}: {e}")
 
 def focus_on_window(window):
-    """Sets focus on the specified window."""
     try:
         window.set_focus()
         print("Content Manager - Window focus set")
     except Exception as e:
         print(f"Content Manager - Failed to set focus: {e}")
 
-
 def hover_over_first_item(menu):
-    # Click to open the dropdown
     menu.click_input()
-    time.sleep(.3)  # Let the dropdown expand
-
-    # Now, find the first available child element
+    time.sleep(.3)
     first_item = menu.children()[0]
-
-    # Get the mid point of the first item
     mid_point = first_item.rectangle().mid_point()
-
-    # Hover over the first item using pyautogui
     pyautogui.moveTo(mid_point.x, mid_point.y)
-
 
 def handle_menu_selection(main_window, shortcut, button_name, menu_id, item_name):
     """
@@ -102,34 +73,28 @@ def handle_menu_selection(main_window, shortcut, button_name, menu_id, item_name
     hover_over_first_item(menu_item)
 
     # Find the item within the menu and click it
-    target_item = menu_item.child_window(title=item_name, control_type="Text")
+    try:
+        target_item = menu_item.child_window(title=item_name, control_type="Text")
+        target_item.click_input()
+        print(f"Successfully selected: {item_name}")
+        time.sleep(.5)
+    except Exception as e:
+        print(f"ERROR: Preset '{item_name}' not found in menu '{menu_id}'. Available options should be verified.")
     target_item.click_input()
     time.sleep(.5)
 
-
 def main():
-    # Get command line arguments
-    ac_audio_preset, ac_video_preset, cm_preset = get_args()
-
-    # Launch the application
+    ac_audio_preset, ac_video_preset, ac_controls_preset, cm_preset = get_args()
     launch_application(CONTENT_MANAGER_PATH)
     time.sleep(3)
-
-    # Connect to the application
     main_window = connect_to_application(CONTENT_MANAGER_PATH)
     time.sleep(1)
-
-    # Set focus on the main window
     focus_on_window(main_window)
     main_window.set_focus()
-
-    # Handle AC settings
     handle_menu_selection(main_window, 'alt+f2', "AUDIO", "PART_Menu", ac_audio_preset)
     handle_menu_selection(main_window, 'alt+f2', "VIDEO", "PART_Menu", ac_video_preset)
-
-    # Handle CM settings
+    handle_menu_selection(main_window, 'alt+f2', "CONTROLS", "PART_Menu", ac_controls_preset)
     handle_menu_selection(main_window, 'alt+f3', None, "PART_Menu", cm_preset)
-
 
 if __name__ == "__main__":
     main()
