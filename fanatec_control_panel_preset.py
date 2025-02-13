@@ -64,15 +64,15 @@ else:
 
 # Define the setup click coordinates
 setup_coordinates = {
-    1: (415, 160),
-    2: (550, 160),
-    3: (685, 160),
-    4: (820, 160),
-    5: (955, 160)
+    1: (660, 255),
+    2: (880, 255),
+    3: (1100, 255),
+    4: (1320, 255),
+    5: (1540, 255)
 }
 
 # Click Tuning Menu Button
-mouse_click(135, 340)
+mouse_click(135, 540)
 time.sleep(1)
 
 # Click the specified setup based on the setup number
