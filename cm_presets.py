@@ -75,7 +75,7 @@ def handle_menu_selection(main_window, shortcut, button_name, menu_id, item_name
     # Find the item within the menu and click it
     try:
         target_item = menu_item.child_window(title=item_name, control_type="Text")
-        target_item.click_input()
+        # target_item.click_input() # Extra Click not needed
         print(f"Successfully selected: {item_name}")
         time.sleep(.5)
     except Exception as e:
