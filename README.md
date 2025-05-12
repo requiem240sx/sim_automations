@@ -2,8 +2,18 @@
 
 Automate your presets and setup you Sim Racing rig for various games, cars, driving styles, key button mappings etc...
 
-I'm sick of having to pre-select so many things to Drift or do Grip or Rally.  From Fanatec Settings, In Game Settings, Key Mapping (JoyToKey).  It becomes to constnat battle to try to get it right, and makes me avoid playing other racing styles as its too much setup.  This is my implementation to simplfy this and write a few scripts to automatically setup my environment for what I want. 
+I'm sick of having to pre-select so many things to Drift or do Grip or Rally.  From Fanatec Settings, In Game Settings, Key Mapping (JoyToKey).  It becomes to constnat battle to try to get it right, and makes me avoid playing other racing styles as its too much setup.  This is my implementation to simplfy this and write a few scripts to automatically setup my environment for what I want.
 
+## Using with Claude Code
+
+When using Claude Code with this repository, run the following command to load the project context:
+
+```bash
+claude
+/context
+```
+
+This will load the AI documentation from the `ai_docs` directory and help Claude understand the project structure and conventions.
 
 
 ## main.py
